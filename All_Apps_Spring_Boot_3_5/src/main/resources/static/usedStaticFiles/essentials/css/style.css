@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+/* Font Awesome */
+@import url("generalCss/fontawesome-free/css/all.min.css");
+/* icheck bootstrap */
+@import url("generalCss/icheck-bootstrap/icheck-bootstrap.min.css");
+/* Theme style */
+@import url("generalCss/adminlte/adminlte.css");
+
+@import url("generalCss/package.css");
+
+@import url("generalCss/pace-theme-flat-top.css");
+/*Select 2 Css*/
+@import url("generalCss/select2.min.css");
+@import url("generalCss/select2-bootstrap4.min.css");

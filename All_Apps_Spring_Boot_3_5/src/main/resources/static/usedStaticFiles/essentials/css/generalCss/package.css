@@ -1,0 +1,353 @@
+.bg-image {
+	background: url(../../images/anand-background.jpg) no-repeat center relative;
+	-webkit-background-size: 100% 100%;
+	-moz-background-size: 100% 100%;
+	-o-background-size: 100% 100%;
+	background-size: 100% 100%;
+}
+.package-loader{
+	pointer-events:none;
+	position:fixed;
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+	z-index:99999;
+	background:rgba(255,255,255,0.8);          
+}
+.package-loader img {
+	pointer-events: none;
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);              
+}
+.mandatory {
+	color: red !important;
+	font-size: 15px !important;
+	margin-right: 5px;
+}
+.select2 {
+	border: solid 1px #CED4DA!important;
+	border-radius: 5px !important;
+	height: 38px !important;
+}
+.content-header-margin {
+	margin-top:-10px;
+	font-weight: bold;
+}
+.content-margin {
+	margin-top: -25px;
+}
+div.dataTables_scroll {
+	width: 130%;
+	margin: 0 auto;
+}
+.tableOverFlowDiv {
+	overflow-x: auto !important;
+}
+.select2-selection__choice {
+	color: #ffffff !important;
+	background-color: #002E6D !important;
+}
+.disabledButton {
+	opacity: 0.30 !important;
+	pointer-events: none;
+	cursor: not-allowed !important;
+}
+.disabledBody {
+	opacity: 0.30 !important;
+	pointer-events: none;
+	cursor: not-allowed !important;
+}
+.text-center {
+	text-align:center !important;
+}
+.text-justify {
+	justify-content: center !important;
+}
+.pace-primary .pace .pace-progress {
+	background: #00AEEF;
+}
+.pace-progress {
+	opacity: 0.30 !important;
+	pointer-events: none;
+	cursor: not-allowed !important;
+}
+.textarea-display {
+	white-space: pre-line;
+}
+.bg-table-head {
+	background-color: #00AEEF !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-table-row-0 {
+	background-color: #D1D7E2 !important;
+	color: #485F86 !important;
+	font-weight: bold;
+}
+.bg-table-row-1 {
+	background-color: #EDEEEE !important;
+	color: #485F86 !important;
+	font-weight: bold;
+}
+.bg-table-foot {
+	background-color: #00AEEF !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-1 {
+	background-color: #00AEEF !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-2 {
+	background-color: #002E6D !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-3 {
+	background-color: #63666A !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-4 {
+	background-color: #D1F0FC !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-5 {
+	background-color: #B9C6D7 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-6 {
+	background-color: #D4D5D6 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-7 {
+	background-color: #5DCBF5 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-8 {
+	background-color: #5D7AA2 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-9 {
+	background-color: #9C9EA0 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-10 {
+	background-color: #8BDAF8 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-11 {
+	background-color: #8BA0BD !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-12 {
+	background-color: #B8B9BB !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-13 {
+	background-color: #2EBDF2 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-14 {
+	background-color: #2E5488 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.bg-15 {
+	background-color: #7F8285 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.font-1 {
+	color: #00AEEF !important;
+	font-weight: bold;
+}
+.font-2 {
+	color: #002E6D !important;
+	font-weight: bold;
+}
+.font-3 {
+	color: #63666A !important;
+	font-weight: bold;
+}
+.font-4 {
+	color: #D1F0FC !important;
+	font-weight: bold;
+}
+.font-5 {
+	color: #B9C6D7 !important;
+	font-weight: bold;
+}
+.font-6 {
+	color: #D4D5D6 !important;
+	font-weight: bold;
+}
+.font-7 {
+	color: #5DCBF5 !important;
+	font-weight: bold;
+}
+.font-8 {
+	color: #5D7AA2 !important;
+	font-weight: bold;
+}
+.font-9 {
+	color: #9C9EA0 !important;
+	font-weight: bold;
+}
+.font-10 {
+	color: #8BDAF8 !important;
+	font-weight: bold;
+}
+.font-11 {
+	color: #8BA0BD !important;
+	font-weight: bold;
+}
+.font-12 {
+	color: #B8B9BB !important;
+	font-weight: bold;
+}
+.font-13 {
+	color: #2EBDF2 !important;
+	font-weight: bold;
+}
+.font-14 {
+	color: #2E5488 !important;
+	font-weight: bold;
+}
+.font-15 {
+	color: #7F8285 !important;
+	font-weight: bold;
+}
+
+.card-bg-1 {
+	border-top: 3px solid #00AEEF;
+}
+.font-2 {
+	color: #002E6D !important;
+	font-weight: bold;
+}
+.font-3 {
+	color: #63666A !important;
+	font-weight: bold;
+}
+.font-4 {
+	color: #D1F0FC !important;
+	font-weight: bold;
+}
+.font-5 {
+	color: #B9C6D7 !important;
+	font-weight: bold;
+}
+.font-6 {
+	color: #D4D5D6 !important;
+	font-weight: bold;
+}
+.font-7 {
+	color: #5DCBF5 !important;
+	font-weight: bold;
+}
+.font-8 {
+	color: #5D7AA2 !important;
+	font-weight: bold;
+}
+.font-9 {
+	color: #9C9EA0 !important;
+	font-weight: bold;
+}
+.font-10 {
+	color: #8BDAF8 !important;
+	font-weight: bold;
+}
+.font-11 {
+	color: #8BA0BD !important;
+	font-weight: bold;
+}
+.font-12 {
+	color: #B8B9BB !important;
+	font-weight: bold;
+}
+.font-13 {
+	color: #2EBDF2 !important;
+	font-weight: bold;
+}
+.font-14 {
+	color: #2E5488 !important;
+	font-weight: bold;
+}
+.font-15 {
+	color: #7F8285 !important;
+	font-weight: bold;
+}
+
+.sequence-font-1 {
+	color: #C00000 !important;
+	font-weight: bold;
+}
+.sequence-font-2 {
+	color: #E06000 !important;
+	font-weight: bold;
+}
+.sequence-font-3 {
+	color: #FFC000 !important;
+	font-weight: bold;
+}
+.sequence-font-4 {
+	color: #80AC23 !important;
+	font-weight: bold;
+}
+.sequence-font-5 {
+	color: #009845 !important;
+	font-weight: bold;
+}
+.sequence-bg-1 {
+	background-color: #C00000 !important;
+	font-weight: bold;
+	color: #FFFFFF !important;
+}
+.sequence-bg-2 {
+	background-color: #E06000 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.sequence-bg-3 {
+	background-color: #FFC000 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.sequence-bg-4 {
+	background-color: #80AC23 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.sequence-bg-5 {
+	background-color: #009845 !important;
+	color: #FFFFFF !important;
+	font-weight: bold;
+}
+.text-area-style {
+	 white-space: pre-line
+}
+.toast-body {
+	font-weight: bold;
+	color: #000000 !important;
+}
+body {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+}
