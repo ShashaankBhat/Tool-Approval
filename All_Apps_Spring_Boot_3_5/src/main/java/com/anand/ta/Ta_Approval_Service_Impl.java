@@ -36,24 +36,25 @@ public class Ta_Approval_Service_Impl implements Ta_Approval_Service {
         Ta_Tool_Request tr = toolRequestDao.findById(toolRequestId)
                 .orElseThrow(() -> new RuntimeException("Tool request not found"));
 
-        /* ================= FINALIZE TEMP ATTACHMENTS ================= */
-
         attachmentsDao.finalizeTempAttachments(toolRequestId);
-
-        /* ================= CHANGE STATUS ================= */
 
         Ta_Status submitted = statusDao
                 .findByTaStatusNameAndTaStatusActive("Submitted", 1)
                 .get(0);
 
+        Long entityId = tr.getEntity().getmEntityId();
+
         Ta_Approval_Matrix matrix =
-                approvalMatrixDao.findByMEntity_MEntityIdAndMatrixActive(
-                        tr.getEntity().getmEntityId(), 1);
+                approvalMatrixDao
+                .findByApprovalMatrixForBusinessUnit_TaBusinessUnitIdAndMatrixActive(entityId, 1)
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         if (matrix == null)
             throw new RuntimeException("Approval matrix not configured");
 
-        M_User firstApprover = matrix.getApproverLevel1();
+        M_User firstApprover = matrix.getLevelOne();
 
         if (firstApprover == null)
             throw new RuntimeException("Approver Level 1 not configured");
@@ -78,15 +79,21 @@ public class Ta_Approval_Service_Impl implements Ta_Approval_Service {
 
         saveApprovalAction(tr, loggedIn, 1, remarks, now);
 
+        Long entityId = tr.getEntity().getmEntityId();
+
         Ta_Approval_Matrix matrix =
-                approvalMatrixDao.findByMEntity_MEntityIdAndMatrixActive(
-                        tr.getEntity().getmEntityId(), 1);
+                approvalMatrixDao
+                .findByApprovalMatrixForBusinessUnit_TaBusinessUnitIdAndMatrixActive(entityId, 1)
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         M_User next = getNextApprover(matrix, tr);
 
         if (next != null) {
             tr.setCurrentApproverUser(next);
         } else {
+
             Ta_Status approved = statusDao
                     .findByTaStatusNameAndTaStatusActive("Approved", 1)
                     .get(0);
@@ -155,6 +162,7 @@ public class Ta_Approval_Service_Impl implements Ta_Approval_Service {
 
     @Override
     public String getApprovalHistory(Long toolRequestId) {
+
         return new Gson().toJson(
                 approvalActionDao.findByToolRequest_TaToolRequestId(toolRequestId));
     }
@@ -168,6 +176,7 @@ public class Ta_Approval_Service_Impl implements Ta_Approval_Service {
                                     Date now) {
 
         Ta_Approval_Action action = new Ta_Approval_Action();
+
         action.setToolRequest(tr);
         action.setApproverUser(user);
         action.setActionCode(actionCode);
@@ -186,24 +195,25 @@ public class Ta_Approval_Service_Impl implements Ta_Approval_Service {
         M_User currentUser = tr.getCurrentApproverUser();
 
         if (currentUser == null)
-            return matrix.getApproverLevel1();
+            return matrix.getLevelOne();
 
-        if (matrix.getApproverLevel1() != null &&
-            currentUser.equals(matrix.getApproverLevel1()))
-            return matrix.getApproverLevel2();
+        if (matrix.getLevelOne() != null &&
+            currentUser.equals(matrix.getLevelOne()))
+            return matrix.getLevelTwo();
 
-        if (matrix.getApproverLevel2() != null &&
-            currentUser.equals(matrix.getApproverLevel2()))
-            return matrix.getApproverLevel3();
+        if (matrix.getLevelTwo() != null &&
+            currentUser.equals(matrix.getLevelTwo()))
+            return matrix.getLevelThree();
 
-        if (matrix.getApproverLevel3() != null &&
-            currentUser.equals(matrix.getApproverLevel3()))
-            return matrix.getApproverLevel4();
+        if (matrix.getLevelThree() != null &&
+            currentUser.equals(matrix.getLevelThree()))
+            return matrix.getLevelFour();
 
         return null;
     }
 
     private M_User getLoggedInUser() {
+
         return userDao.findByUserLoginId(
                 SecurityContextHolder.getContext()
                         .getAuthentication()

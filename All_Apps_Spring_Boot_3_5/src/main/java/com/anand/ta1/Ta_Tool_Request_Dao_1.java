@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.anand.masters.M_Entity;
+
 @Repository
 public interface Ta_Tool_Request_Dao_1 extends JpaRepository<Ta_Tool_Request_1, Long> {
 
@@ -12,5 +14,5 @@ public interface Ta_Tool_Request_Dao_1 extends JpaRepository<Ta_Tool_Request_1, 
 
     List<Ta_Tool_Request_1> findByRequestNumber(String requestNumber);
 
-    List<Ta_Tool_Request_1> findByEntityIdAndRequestActive(Ta_Business_Unit entityId, Integer active);
+    List<Ta_Tool_Request_1> findByEntityIdAndRequestActive(M_Entity entityId, Integer active);
 }

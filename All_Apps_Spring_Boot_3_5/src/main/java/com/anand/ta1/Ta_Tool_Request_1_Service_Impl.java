@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.anand.common.InputValidation;
 import com.anand.masters.M_Entity_Dao;
@@ -28,6 +29,7 @@ public class Ta_Tool_Request_1_Service_Impl implements Ta_Tool_Request_1_Service
 	@Autowired InputValidation inputValidationService;
 	@Autowired M_User_Dao mUserDao;
 	@Autowired M_Entity_Dao mEntityDao;
+	@Autowired Ta_Attachments_Service taAttachmentsService;
 
     @Override
     @Transactional
@@ -200,6 +202,37 @@ public class Ta_Tool_Request_1_Service_Impl implements Ta_Tool_Request_1_Service
         }
     	return response.toString();
     }
+
+	@Override
+	@Transactional
+	public void saveTaToolRequestDetails(
+			Ta_Tool_Request_1 taToolRequest,
+			MultipartFile[] backgroundAttachments,
+			MultipartFile[] remarkAttachments){
+
+		Ta_Tool_Request_1 savedRequest = taToolRequestDao.save(taToolRequest);
+
+		if(backgroundAttachments != null && backgroundAttachments.length > 0){
+
+			taAttachmentsService.saveAttachments(
+					savedRequest,
+					backgroundAttachments,
+					Ta_Attachments.SECTION_BACKGROUND
+			);
+
+		}
+
+		if(remarkAttachments != null && remarkAttachments.length > 0){
+
+			taAttachmentsService.saveAttachments(
+					savedRequest,
+					remarkAttachments,
+					Ta_Attachments.SECTION_REMARK
+			);
+
+		}
+
+	}
 
 	@Override
 	public Ta_Tool_Request_1 getTaToolRequestDetail(HttpServletRequest request) {

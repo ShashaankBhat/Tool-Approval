@@ -6,10 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import com.anand.masters.M_Role_Service;
 import com.google.gson.Gson;
 
@@ -23,6 +29,7 @@ public class TARestController {
 	@Autowired private Ta_Recovery_Type_Service taRecoveryTypeService;
 	@Autowired private Ta_Status_Service taStatusService;
 	@Autowired private Ta_Approval_Matrix_Service taApprovalMatrixService;
+	@Autowired private Ta_Attachments_Service taAttachmentsService;
 
 	@GetMapping("getBusinessUnitDetails")
     public String getBusinessUnitDetails(HttpServletRequest request, RedirectAttributes reAttr) {
@@ -281,4 +288,116 @@ public class TARestController {
 		finalApprovalMatrixList.clear(); finalApprovalMatrixList = null;
 		return response.toString();
 	}
+
+	@PostMapping("ta-attachment-upload")
+    public String uploadAttachment(HttpServletRequest request,
+            @RequestParam("toolRequestId") Long toolRequestId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("section") Integer section) {
+
+        try {
+
+			if (mRoleService.getUrlAccessForUser(request, "ta-approval-reqeust") == 0) {
+				return "error";
+			}
+
+            if(toolRequestId == null) {
+                return "error";
+            }
+
+            return taAttachmentsService.uploadAttachment(
+                    request,
+                    toolRequestId,
+                    file,
+                    section);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @GetMapping("ta-attachment-download")
+    public ResponseEntity<byte[]> downloadAttachment(
+            @RequestParam("attachmentId") Long attachmentId) {
+
+        try {
+
+			if (mRoleService.getUrlAccessForUser(request, "ta-approval-reqeust") == 0) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+
+            byte[] fileData =
+                    taAttachmentsService.downloadAttachment(attachmentId);
+
+            String fileName =
+                    taAttachmentsService.getAttachmentFileName(attachmentId);
+
+            if(fileData == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + fileName + "\"")
+                    .body(fileData);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("ta-attachment-delete")
+    public String deleteAttachment(HttpServletRequest request,
+            @RequestParam("attachmentId") Long attachmentId) {
+
+        try {
+
+			if (mRoleService.getUrlAccessForUser(request, "ta-approval-reqeust") == 0) {
+				return "error";
+			}
+
+            return taAttachmentsService.deleteAttachment(request, attachmentId);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @GetMapping("getAttachmentList")
+    public String getAttachmentList(HttpServletRequest request) {
+
+        StringBuilder response = new StringBuilder();
+
+        try {
+
+			if (mRoleService.getUrlAccessForUser(request, "ta-approval-reqeust") == 0) {
+				return "error";
+			}
+
+            Long toolRequestId =
+                    Long.parseLong(request.getParameter("toolRequestId"));
+
+            Integer section =
+                    Integer.parseInt(request.getParameter("section"));
+
+            List<Ta_Attachments> list =
+                    taAttachmentsService
+                            .getAttachmentListBySection(toolRequestId, section);
+
+            Gson gson = new Gson();
+            response.append(gson.toJson(list));
+            gson = null;
+
+        } catch(Exception e) {
+
+            e.printStackTrace();
+            response.setLength(0);
+            response.append("error");
+        }
+
+        return response.toString();
+    }
 }

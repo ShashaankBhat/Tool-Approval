@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.anand.masters.M_Entity_Service;
 import com.anand.masters.M_Role_Service;
@@ -26,6 +27,7 @@ public class TAController {
     @Autowired private Ta_Recovery_Type_Service taRecoveryTypeService;
     @Autowired private Ta_Approval_Matrix_Service taApprovalMatrixService;
     @Autowired private Ta_Tool_Request_1_Service taToolRequestService;
+    @Autowired private Ta_Attachments_Service taAttachmentsService;
 
 	@GetMapping("dashboard-tool-approval")
     public String dashboardToolApproval(HttpServletRequest request, Model model, RedirectAttributes reAttr) {
@@ -419,10 +421,26 @@ public class TAController {
                 reAttr.addFlashAttribute("regMsg", "You are not authorized to access the page your tried to access, you have been re-directed to dashboard.");
                 return "redirect:/dashboard";
             }
-    		model.addAttribute("taToolRequest", taToolRequestService.getTaToolRequestDetail(request));
+    		taToolRequest = taToolRequestService.getTaToolRequestDetail(request);
+    		model.addAttribute("taToolRequest", taToolRequest);
             model.addAttribute("businessUnitList", taBusinessUnitService.getBusinessUnitByActiveStatus(1));
             model.addAttribute("commodityManagerList", mUserService.getActiveUserByRole(1, "TA Commodity Manager"));
             model.addAttribute("plantCodeList", mEntityService.getActiveChildEntityByStatus(1));
+            if(taToolRequest != null &&
+               taToolRequest.getTaToolRequestId() != null) {
+
+                model.addAttribute(
+                    "backgroundAttachments",
+                    taAttachmentsService.getAttachmentListBySection(
+                            taToolRequest.getTaToolRequestId(),
+                            Ta_Attachments.SECTION_BACKGROUND));
+
+                model.addAttribute(
+                    "remarkAttachments",
+                    taAttachmentsService.getAttachmentListBySection(
+                            taToolRequest.getTaToolRequestId(),
+                            Ta_Attachments.SECTION_REMARK));
+            }
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
@@ -431,34 +449,19 @@ public class TAController {
     }
 
     @PostMapping("ta-approval-reqeust")
-    public String taApprovalReqeustPost(HttpServletRequest request,Model model,RedirectAttributes reAttr,
-    		@ModelAttribute("taToolRequest") Ta_Tool_Request_1 taToolRequest) {
-    	try {
-    		if (mRoleService.getUrlAccessForUser(request, "ta-approval-reqeust") == 0) {
-                reAttr.addFlashAttribute("css", "sequence-bg-1");
-                reAttr.addFlashAttribute("regMsg", "You are not authorized to access the page your tried to access, you have been re-directed to dashboard.");
-                return "redirect:/dashboard";
-            }
-    		StringBuilder response = new StringBuilder();
-    		response.append(taToolRequestService.saveTaToolRequestDetails(request, taToolRequest));
-    		reAttr.addFlashAttribute("css", "sequence-bg-5");
-            if(response.toString().contains("add")) {
-				reAttr.addFlashAttribute("regMsg", "Tool Request information added successfully.");
-			} else if(response.toString().contains("edit")) {
-				reAttr.addFlashAttribute("regMsg", "Tool Request information edited successfully.");
-			} else if(response.toString().contains("error")) {
-				model.addAttribute("css", "sequence-bg-1");
-				model.addAttribute("regMsg", "You were trying to save invalid values, try again with valid values.");
-				model.addAttribute("businessUnitList", taBusinessUnitService.getBusinessUnitByActiveStatus(1));
-	            model.addAttribute("commodityManagerList", mUserService.getActiveUserByRole(1, "TA Commodity Manager"));
-	            model.addAttribute("plantCodeList", mEntityService.getActiveChildEntityByStatus(1));
-	            model.addAttribute("taToolRequest", taToolRequest);
-	            return "ta/ta-approval-reqeust";
-			}
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-		/* return "ToolApproval/Add_Tool_Approval_Request"; */
-    	return "redirect:/ta-approval-reqeust";
+    public String saveToolRequest(
+            @ModelAttribute Ta_Tool_Request_1 taToolRequest,
+            @RequestParam(value = "backgroundAttachments", required = false) MultipartFile[] backgroundAttachments,
+            @RequestParam(value = "remarkAttachments", required = false) MultipartFile[] remarkAttachments,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+
+        taToolRequestService.saveTaToolRequestDetails(
+            taToolRequest,
+            backgroundAttachments,
+            remarkAttachments
+        );
+
+        return "redirect:dashboard-tool-approval";
     }
 }
